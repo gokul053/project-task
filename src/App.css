@@ -1,0 +1,8 @@
+.headerStyle {
+    min-height:100%;
+    background:linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/src/assets/image/headerImage.jpg');
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* height: 100vh; */
+}
