@@ -11,7 +11,7 @@ const HomePage = () => {
     const getAllSportPhotoData = useSelector((state)=> state?.getAllSportPhoto?.getSportPhotoModal?.data);
     const getImage = (id) => {
         return getAllSportPhotoData?.find(data => data.sport.id === id)?.url;
-    }
+    } 
     useEffect(()=>{
         dispatch(getAllSport());
         dispatch(getAllSportPhoto());
@@ -32,6 +32,7 @@ const HomePage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container spacing={{ xs: 2, md: 3 }}>
+                                {console.log(getAllSportsData)}
                                 {getAllSportsData?.map((sport, index)=>{
                                     return(
                                         <React.Fragment key={index}>
@@ -50,12 +51,12 @@ const HomePage = () => {
                                                                 <Grid item display="flex" alignItems="center" flexWrap="wrap" marginRight="auto">
                                                                     <img width={35} src={getImage(sport?.id)} alt="logo" /> 
                                                                     <Typography marginLeft={1} variant="caption">
-                                                                        {sport.title}
+                                                                        {sport?.title}
                                                                     </Typography>
                                                                 </Grid>
                                                                 <Grid item marginLeft="auto">
                                                                     <Typography variant="caption">
-                                                                        999 courts
+                                                                        1 courts
                                                                     </Typography>
                                                                 </Grid>
                                                                 </Grid>

@@ -1,3 +1,5 @@
+import { getFacilityCountApi } from "../constants/facilityConstant";
+
 let intialValues = {
     getFacilityCount : 0,
 }
@@ -5,7 +7,7 @@ export const getFacilityCountReducer = (value = intialValues, action) => {
     switch (action?.type) {
         case getFacilityCountApi.REQUEST:
             return { getFacilityCountModal: action?.payload };
-        case getFacilityCountApi.SUCCESS:
+        case getFacilityCountApi.SUCCESS:   
             return { getFacilityCountModal: action?.payload };
         case getFacilityCountApi.ERROR:
             return { getFacilityCountModal: action?.payload };
