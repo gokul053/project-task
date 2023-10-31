@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Grid, Typography, Divider, Button, Box, AppBar } from "@mui/material";
 import React from "react";
+import { Copyright } from "@mui/icons-material";
 
 const FooterPage = () => {
     const footerData = ["About us", "Terms & Conditions", "Privacy", "Download App"];
@@ -28,7 +29,7 @@ const FooterPage = () => {
                 <Divider variant="fullWidth" sx={{marginY:2, borderColor:"white"}} /> 
                 <Grid container>
                     <Grid item margin={"auto"} textAlign={"center"} >
-                            <Typography color="white" >We Play Real C 2020. All Rights Reserved</Typography>
+                            <Typography color="white" >We Play Real <Copyright fontSize="inherit" /> 2020. All Rights Reserved</Typography>
                     </Grid>
                 </Grid>
             </AppBar>

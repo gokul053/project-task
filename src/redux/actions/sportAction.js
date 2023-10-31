@@ -9,11 +9,11 @@ export const getAllSport = () => async (dispatch) => {
     });
     try {
         const {data} = (await axios.get(BASR_URL + "api/sports", {headers:{'Authorization': TOKEN}}));
-        const tempData = data.map(async(sport)=>{
+        const tempData = await Promise.all(
+            data.map(async(sport)=>{
             try{
-                const data1 = await axios.get(BASR_URL + `api/facilities/count?sportId.equals=${sport.id}`, {headers:{'Authorization': TOKEN}})
-                .then((response) => ({...sport, facilityCount: response?.data}));
-                console.log(data1);
+                await axios.get(BASR_URL + `api/facilities/count?sportId.equals=${sport.id}`, {headers:{'Authorization': TOKEN}})
+                .then((response) => (sport = {...sport, facilityCount: response?.data}));
                 return sport;
             } catch {
                 await dispatch({
@@ -22,6 +22,7 @@ export const getAllSport = () => async (dispatch) => {
                 });
             }
         })
+        );
         await dispatch({
             type: getAllSportsApi.SUCCESS,
             payload:{loading: false, data:tempData}

@@ -4,7 +4,8 @@ import { Outlet } from "react-router-dom";
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useSelector } from "react-redux";
-import React from "react";
+import React, { useState } from "react";
+import LoginModal from "../components/LoginModal";
 const tabStyle = {
     paddingBottom: 0,
     paddingX: 0,
@@ -15,6 +16,9 @@ const searchBarStyle = {
     backgroundColor: "white"
 }
 const HeaderPage = () => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleModalOpen = () => setModalOpen(true);
+    const handleModalClose = () => setModalOpen(false);
     const getAllSportsData = useSelector((state)=> state?.getAllSport?.getSportsModal?.data);
     return (
         <>
@@ -25,7 +29,10 @@ const HeaderPage = () => {
                         <img width={275} src={mainLogo} alt="logo" />
                     </Grid>
                     <Grid item xs={6} justifyContent="end" alignItems={"center"} display={"flex"}>
-                        <Button sx={{borderRadius:"15px", textTransform:"none"}} color="primary" variant="contained" size="small" > Log in </Button>
+                        <Button sx={{borderRadius:"15px", textTransform:"none"}} onClick={() => handleModalOpen()} color="primary" variant="contained" size="small" >
+                            Log in 
+                            <LoginModal open={modalOpen} handleClose={() => handleModalClose()} />
+                        </Button>
                     </Grid>
                     <Grid item xs={5} sx={{margin:"auto"}} textAlign="center">
                         <Typography  variant="h6">
@@ -50,13 +57,14 @@ const HeaderPage = () => {
                             <FormControl sx={{...searchBarStyle , margin:"auto", minWidth: 120}}>
                                 <Select
                                 size="small"
+                                value=''
                                 placeholder="Sport"
                                 >
                                     {getAllSportsData?.map((sport,index)=>{
                                         return(
-                                            <React.Fragment key={index}>
+                                            < div key={index}>
                                                 <MenuItem value={index}>{sport.title}</MenuItem>
-                                            </React.Fragment>
+                                            </div>
                                         );
                                     })}
                                 </Select>

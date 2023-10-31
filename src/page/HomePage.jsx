@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import cardImage from "../assets/image/headerImage.jpg"
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSport, getAllSportPhoto } from "../redux/actions/sportAction";
-import React, { useEffect } from "react";
+import React, { useEffect} from "react";
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -32,7 +32,6 @@ const HomePage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container spacing={{ xs: 2, md: 3 }}>
-                                {console.log(getAllSportsData)}
                                 {getAllSportsData?.map((sport, index)=>{
                                     return(
                                         <React.Fragment key={index}>
@@ -43,20 +42,20 @@ const HomePage = () => {
                                                         component="img"
                                                         height="140"
                                                         image={cardImage}
-                                                        alt="green iguana"
+                                                        alt="sport  "
                                                         />
                                                         <CardContent sx={{padding:1}}>
                                                             <Box>
                                                             <Grid container alignItems="center">
                                                                 <Grid item display="flex" alignItems="center" flexWrap="wrap" marginRight="auto">
                                                                     <img width={35} src={getImage(sport?.id)} alt="logo" /> 
-                                                                    <Typography marginLeft={1} variant="caption">
+                                                                    <Typography marginLeft={1} fontSize={14} fontWeight={500}>
                                                                         {sport?.title}
                                                                     </Typography>
                                                                 </Grid>
                                                                 <Grid item marginLeft="auto">
                                                                     <Typography variant="caption">
-                                                                        1 courts
+                                                                        {sport.facilityCount} courts
                                                                     </Typography>
                                                                 </Grid>
                                                                 </Grid>

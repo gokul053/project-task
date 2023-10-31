@@ -6,7 +6,7 @@ import { getFacilityCountReducer } from "./reducers/facilityReducer";
 const reducer = combineReducers({
     getAllSport: getAllSportsReducer,
     getAllSportPhoto: getSportPhotoReducer,
-    getFacilityCount: getFacilityCountReducer
+    getFacilityCount: getFacilityCountReducer,
 });
 
 const initialState = {};
