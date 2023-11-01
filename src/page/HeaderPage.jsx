@@ -6,6 +6,11 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import LoginModal from "../components/LoginModal";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/actions/userAction";
+
 const tabStyle = {
     paddingBottom: 0,
     paddingX: 0,
@@ -15,11 +20,43 @@ const tabStyle = {
 const searchBarStyle = {
     backgroundColor: "white"
 }
+const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: 250,
+      },
+    },
+  };
 const HeaderPage = () => {
+    const dispatch = useDispatch();
     const [modalOpen, setModalOpen] = useState(false);
     const handleModalOpen = () => setModalOpen(true);
-    const handleModalClose = () => setModalOpen(false);
+    const handleModalClose = () => {
+        setModalOpen(false);
+        formik.resetForm();
+    }
     const getAllSportsData = useSelector((state)=> state?.getAllSport?.getSportsModal?.data);
+    const userSchema = yup.object().shape({
+        email: yup
+            .string()
+            .email("Email must be a valid email")
+            .required("Email is required"),
+        password: yup
+            .string()
+            .required("Password is required")
+            .min(8, "Password must be at least 8 characters"),
+    });
+    const formik = useFormik({
+        initialValues: {
+          email: '',
+          password: '',
+        },
+        validationSchema: userSchema,
+        onSubmit: (values) => {
+          alert(JSON.stringify(values, null, 2));
+          dispatch(login(formik.values.email, formik.values.password));
+        },
+      });
     return (
         <>
         <AppBar className="headerStyle" position="static">
@@ -31,8 +68,8 @@ const HeaderPage = () => {
                     <Grid item xs={6} justifyContent="end" alignItems={"center"} display={"flex"}>
                         <Button sx={{borderRadius:"15px", textTransform:"none"}} onClick={() => handleModalOpen()} color="primary" variant="contained" size="small" >
                             Log in 
-                            <LoginModal open={modalOpen} handleClose={() => handleModalClose()} />
                         </Button>
+                        <LoginModal open={modalOpen} formik={formik} handleClose={() => handleModalClose()} />
                     </Grid>
                     <Grid item xs={5} sx={{margin:"auto"}} textAlign="center">
                         <Typography  variant="h6">
@@ -56,10 +93,15 @@ const HeaderPage = () => {
                             <TextField sx={searchBarStyle} placeholder="Location" size="small"></TextField>
                             <FormControl sx={{...searchBarStyle , margin:"auto", minWidth: 120}}>
                                 <Select
+                                displayEmpty
                                 size="small"
                                 value=''
                                 placeholder="Sport"
+                                MenuProps={MenuProps}
                                 >
+                                    <MenuItem value="" disabled>
+                                        <span>Sports</span>
+                                    </MenuItem>
                                     {getAllSportsData?.map((sport,index)=>{
                                         return(
                                             < div key={index}>

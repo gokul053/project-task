@@ -7,11 +7,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import setupInterceptors from './globals/interceptors';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#f44336'
+      main: '#de342f'
                },
     secondary: {
       main: "#ffcc80"
@@ -19,6 +20,7 @@ const theme = createTheme({
            }
 });
 const root = ReactDOM.createRoot(document.getElementById('root'));
+setupInterceptors(store);
 root.render(
   <Provider store={store}>
     <BrowserRouter>

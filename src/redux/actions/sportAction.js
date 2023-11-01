@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getAllSportsApi, getAllSportPhotoApi } from "../constants/sportConstant";
-import { BASR_URL, TOKEN } from "../../pageConstants";
 
 export const getAllSport = () => async (dispatch) => {
     await dispatch({
@@ -8,11 +7,11 @@ export const getAllSport = () => async (dispatch) => {
         payload: {loading: true}
     });
     try {
-        const {data} = (await axios.get(BASR_URL + "api/sports", {headers:{'Authorization': TOKEN}}));
+        const {data} = (await axios.get("api/sports"));
         const tempData = await Promise.all(
             data.map(async(sport)=>{
             try{
-                await axios.get(BASR_URL + `api/facilities/count?sportId.equals=${sport.id}`, {headers:{'Authorization': TOKEN}})
+                await axios.get(`api/facilities/count?sportId.equals=${sport.id}`)
                 .then((response) => (sport = {...sport, facilityCount: response?.data}));
                 return sport;
             } catch {
@@ -41,7 +40,7 @@ export const getAllSportPhoto = () => async(dispatch) => {
         payload: {loading: true}
     });
     try {
-        const {data} = (await axios.get(BASR_URL + 'api/v1/sport-photos', {headers:{'Authorization': TOKEN}}));
+        const {data} = (await axios.get('api/v1/sport-photos'));
         await dispatch({
             type: getAllSportPhotoApi.SUCCESS,
             payload:{loading: false, data:data}
