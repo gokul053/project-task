@@ -21,11 +21,11 @@ const HomePage = () => {
         <>
             <Container>
                     <Grid container paddingBottom={4}>
-                        <Grid xs={12} item paddingY={3} textAlign={"center"}>
-                            <Typography variant="h4">
+                        <Grid xs={12} item paddingY={7} textAlign={"center"}>
+                            <Typography fontSize={30} fontWeight={500}>
                                 Games & Entertainment
                             </Typography>
-                            <Typography paddingTop={2} variant="body1">
+                            <Typography marginTop={2} fontSize={15} fontWeight={500}>
                             Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.
                             int, and publishing industries for previewing layouts and visual mockups.
                             </Typography>
@@ -49,7 +49,7 @@ const HomePage = () => {
                                                             <Grid container alignItems="center">
                                                                 <Grid item display="flex" alignItems="center" flexWrap="wrap" marginRight="auto">
                                                                     <img width={35} src={getImage(sport?.id)} alt="logo" /> 
-                                                                    <Typography marginLeft={1} fontSize={14} fontWeight={500}>
+                                                                    <Typography marginLeft={1} fontSize={13} fontWeight={600}>
                                                                         {sport?.title}
                                                                     </Typography>
                                                                 </Grid>

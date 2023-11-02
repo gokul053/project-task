@@ -7,8 +7,8 @@ import googleIcon from "../assets/image/google_icon.svg";
 
 const style = {
     position: 'relative',
-    top: '46%',
-    left: '79%',
+    top: '44%',
+    left: '77%',
     transform: 'translate(-50%, -50%)',
     width: 270,
     bgcolor: 'background.paper',

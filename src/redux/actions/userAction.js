@@ -1,4 +1,4 @@
-import setupInterceptors from "../../globals/interceptors";
+import axios from "axios";
 import { loginApi } from "../constants/userConstant";
 
 export const login = (username, pass) => async(dispatch) => {
@@ -11,6 +11,7 @@ export const login = (username, pass) => async(dispatch) => {
             userName: username,
             password: pass
           }));
+        localStorage.setItem('accessToken', data.accessToken);
         console.log(data);
         await dispatch({
             type: loginApi.SUCCESS,

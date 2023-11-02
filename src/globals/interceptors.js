@@ -1,11 +1,11 @@
-import { Axios } from "axios";
+import axios from "axios";
 import { BASE_URL } from "./pageConstants";
 
 const setupInterceptors = () => {
-    Axios.defaults.baseURL = BASE_URL;
-    Axios.interceptors.request.use(
+    axios.defaults.baseURL = BASE_URL;
+    axios.interceptors.request.use(
         (config) => {
-          const token = localStorage.getItem('accesstoken');
+          const token = localStorage.getItem('accessToken');
           const baseURL = BASE_URL;
           config.headers["user-tz"] = new Date().getTimezoneOffset();
           if (token) {
