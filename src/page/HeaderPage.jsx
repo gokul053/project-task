@@ -1,4 +1,4 @@
-import { AppBar, Button, Container, Divider, FormControl, FormGroup, Grid, InputAdornment, MenuItem, Select, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { AppBar, Button, Container, Divider, FormControl, FormGroup, Grid, IconButton, InputAdornment, MenuItem, Select, Tab, Tabs, TextField, Typography } from "@mui/material";
 import mainLogo from "../assets/image/logopy.svg";
 import { Outlet } from "react-router-dom";
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
@@ -10,7 +10,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/actions/userAction";
-import { LocationOn, Search } from "@mui/icons-material";
+import { LocationOn, MilitaryTech, MyLocation, Search } from "@mui/icons-material";
 const tabStyle = {
     paddingBottom: 0,
     paddingX: 0,
@@ -21,7 +21,7 @@ const searchBarStyle = {
     backgroundColor: "white",
     '& fieldset': {
         borderRadius: '0px',
-      }
+      },
 }
 const MenuProps = {
     PaperProps: {
@@ -97,47 +97,60 @@ const HeaderPage = () => {
                                     <Tab sx={tabStyle} disableRipple value="three" label="Lessons" />
                                 </Tabs>
                             </Grid>
-                            <Grid item xs={12} display="flex" justifyContent="center">
-                                <FormGroup  row>
-                                    <TextField sx={searchBarStyle} placeholder="Location" size="small" 
+                            <Grid item xs={12} width={"100%"} paddingX={15} display="flex" justifyContent="center">
+                                <FormGroup sx={{width:"100%"}} row>
+                                    <TextField sx={{...searchBarStyle,width:"25%"}} placeholder="Location" size="small" 
                                         InputProps={{
                                             startAdornment: (
                                               <InputAdornment position="start">
                                                 <LocationOn />
                                               </InputAdornment>
                                             ),
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton sx={{padding:0, color:"#3a9ffb"}}>
+                                                        <MyLocation />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
                                           }}
                                      />
-                                    <FormControl sx={searchBarStyle}>
+                                    <FormControl sx={{...searchBarStyle, width:"20%"}}>
                                         <Select
-                                        sx={{width:"200px"}}
                                         displayEmpty
                                         size="small"
                                         value=''
                                         placeholder="Sport"
                                         MenuProps={MenuProps}
+                                        startAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton>
+                                                    <MilitaryTech />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
                                         >
                                             <MenuItem value="" disabled>
                                                 <span>Sports</span>
                                             </MenuItem>
-                                            {getAllSportsData?.map((sport,index)=>{
+                                            {getAllSportsData?.data?.map((sport,index)=>{
                                                 return(
                                                     < div key={index}>
-                                                        <MenuItem value={index}>{sport.title}</MenuItem>
+                                                        <MenuItem value={index}>{sport?.title}</MenuItem>
                                                     </div>
                                                 );
                                             })}
                                         </Select>
                                     </FormControl>
                                     <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DatePicker sx={searchBarStyle}
+                                    <DatePicker sx={{...searchBarStyle, width:"20%"}}
                                     slotProps={{ textField: { size: 'small', placeholder: 'Date'}, inputAdornment:{ position: "start"} }}
                                     />
-                                    <TimePicker sx={searchBarStyle}
+                                    <TimePicker sx={{...searchBarStyle, width:"20%"}}
                                     slotProps={{ textField: { size: 'small', placeholder: 'Time'}, inputAdornment:{ position: "start"} }}
                                     />
                                     </LocalizationProvider>
-                                    <Button variant="contained" sx={{textTransform: 'none', fontWeight:500, borderRadius:0}} > <Search /> Search </Button>
+                                    <Button variant="contained" sx={{textTransform: 'none', fontWeight:500, borderRadius:0, width:"15%"}} > <Search /> Search </Button>
                                 </FormGroup>
                             </Grid>
                         </Grid>

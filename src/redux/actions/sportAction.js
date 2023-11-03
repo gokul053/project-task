@@ -4,14 +4,15 @@ import { getAllSportsApi, getAllSportPhotoApi } from "../constants/sportConstant
 export const getAllSport = () => async (dispatch) => {
     await dispatch({
         type: getAllSportsApi.REQUEST,
-        payload: {loading: true}
+        payload: {loading: true, data: [1,1,1,1]}
     });
     try {
-        const {data} = (await axios.get("api/sports"));
-        const tempData = await Promise.all(
-            data.map(async(sport)=>{
+        const response = (await axios.get("api/sports"));
+        console.log(response?.status);
+        const tempData = response?.status === 200 && await Promise.all(
+            response?.data?.map(async(sport)=>{
             try{
-                await axios.get(`api/facilities/count?sportId.equals=${sport.id}`)
+                await axios.get(`api/facilities/count?sportId.equals=${sport?.id}`)
                 .then((response) => (sport = {...sport, facilityCount: response?.data}));
                 return sport;
             } catch {
@@ -24,12 +25,12 @@ export const getAllSport = () => async (dispatch) => {
         );
         await dispatch({
             type: getAllSportsApi.SUCCESS,
-            payload:{loading: false, data:tempData}
+            payload: response?.status === 200 ? {loading: false, data: tempData } : {loading: true, data: [1,1,1,1]}
         });
     } catch {
         await dispatch({
             type: getAllSportsApi.ERROR,
-            payload:{loading: false}
+            payload:{loading: true, data:[1,1,1,1]}
         });
     }
 }
@@ -48,7 +49,7 @@ export const getAllSportPhoto = () => async(dispatch) => {
     } catch {
         await dispatch({
             type: getAllSportPhotoApi.ERROR,
-            payload:{loading: false}
+            payload:{loading: false, data:[1,1,1,1]}
         });
     }
 }
