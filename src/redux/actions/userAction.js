@@ -12,7 +12,10 @@ export const login = (username, pass) => async(dispatch) => {
             password: pass
           }));
         localStorage.setItem('accessToken', data.accessToken);
-        console.log(data);
+        localStorage.setItem('refreshToken', data.refreshToken);
+        const accountData = (await axios.get('api/account'));
+        localStorage.setItem('name', accountData.data.firstName + " " + accountData.data.lastName );
+        localStorage.setItem('id', accountData.data.id);
         await dispatch({
             type: loginApi.SUCCESS,
             payload:{loading: false, data:data}

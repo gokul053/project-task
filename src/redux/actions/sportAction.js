@@ -8,7 +8,6 @@ export const getAllSport = () => async (dispatch) => {
     });
     try {
         const response = (await axios.get("api/sports"));
-        console.log(response?.status);
         const tempData = response?.status === 200 && await Promise.all(
             response?.data?.map(async(sport)=>{
             try{

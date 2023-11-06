@@ -33,13 +33,19 @@ const MenuProps = {
 const HeaderPage = () => {
     const dispatch = useDispatch();
     const [modalOpen, setModalOpen] = useState(false);
+    const [isSignUp, setIsSignUp] = useState(false);
+    const [activeStep, setActiveStep] = useState(0);
+    const handleNext = () => { activeStep < 2 && setActiveStep((prevActiveStep) => prevActiveStep + 1); };
+    // const handleBack = () => { setActiveStep((prevActiveStep) => prevActiveStep - 1); };
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => {
+        setActiveStep(0);
+        setIsSignUp(false);
         setModalOpen(false);
         formik.resetForm();
     }
     const getAllSportsData = useSelector((state)=> state?.getAllSport?.getSportsModal?.data);
-    const userSchema = yup.object().shape({
+    const logInSchema = yup.object().shape({
         email: yup
             .string()
             .email("Email must be a valid email")
@@ -54,12 +60,60 @@ const HeaderPage = () => {
           email: '',
           password: '',
         },
-        validationSchema: userSchema,
-        onSubmit: (values) => {
-          alert(JSON.stringify(values, null, 2));
+        validationSchema: logInSchema,
+        onSubmit: () => {
           dispatch(login(formik.values.email, formik.values.password));
         },
-      });
+    });
+
+    const signUpSchema = yup.object().shape({
+        email: yup
+            .string()
+            .email("Email must be a valid email")
+            .required("Email is required"),
+        password: yup
+            .string()
+            .required("Password is required")
+            .min(8, "Password must be at least 8 characters"),
+        firstName: yup
+            .string()
+            .required("FirstName is Required")
+            .min(3, "Minimum 3 characters"),
+        lastName: yup
+            .string(),
+        gender: yup
+            .string()
+            .required("Select One"),
+        dateOfBirth: yup
+            .date()
+            .required("Must enter your date of birth"),
+        street: yup
+            .string()
+            .required("Street is required"),
+        city: yup
+            .string()
+            .required("City is Required"),
+        state: yup
+            .string()
+            .uppercase()
+            .max(2)
+            .required("State is Required"),
+        zipCode: yup
+            .number()
+            .min(10000)
+            .max(99999)
+            .required("ZipCode is Required")        
+    });
+    const formikSu = useFormik({
+        initialValues: {
+          email: '',
+          password: '',
+        },
+        validationSchema: signUpSchema,
+        onSubmit: () => {
+            console.log("data");
+        },
+    });
     return (
         <>
         <AppBar className="headerStyle" position="static">
@@ -74,7 +128,7 @@ const HeaderPage = () => {
                                     <Button sx={{borderRadius:"15px", textTransform:"none", fontWeight:700}} onClick={() => handleModalOpen()} color="primary" variant="contained" size="small" >
                                         Log In 
                                     </Button>
-                                    <LoginModal open={modalOpen} formik={formik} handleClose={() => handleModalClose()} />
+                                    <LoginModal open={modalOpen} isSignUp={isSignUp} setIsSignUp={setIsSignUp} activeStep={activeStep} handleNext={handleNext} formik={formik} formikSu={formikSu} handleClose={() => handleModalClose()} />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -133,7 +187,7 @@ const HeaderPage = () => {
                                             <MenuItem value="" disabled>
                                                 <span>Sports</span>
                                             </MenuItem>
-                                            {getAllSportsData?.data?.map((sport,index)=>{
+                                            {getAllSportsData?.map((sport,index)=>{
                                                 return(
                                                     < div key={index}>
                                                         <MenuItem value={index}>{sport?.title}</MenuItem>

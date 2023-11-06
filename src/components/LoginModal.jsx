@@ -1,9 +1,10 @@
-import { Box, Button, Chip, Divider, FormControl, FormHelperText, Grid, IconButton, Modal, OutlinedInput, Typography  } from "@mui/material";
+import { Box, Button, Chip, Divider, Grid, IconButton, Modal, Typography  } from "@mui/material";
 import fbIcon from "../assets/image/fb_icon.svg";
 import appleIcon from "../assets/image/apple_icon.svg";
 import googleIcon from "../assets/image/google_icon.svg";
-
-
+import LoginModalBottom from "./LoginModalBottom";
+import LoginForm from "./LoginForm";
+import SignUpForm from "./SignUpForm";
 
 const style = {
     position: 'relative',
@@ -16,7 +17,7 @@ const style = {
     p: 4,
 };
 
-const LoginModal = ({ open, handleClose, formik }) => {
+const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeStep, handleNext, formikSu }) => {
     return(
         <>
             <Modal
@@ -29,38 +30,16 @@ const LoginModal = ({ open, handleClose, formik }) => {
                     <form onSubmit={formik.handleSubmit}>
                     <Grid container >
                         <Grid item xs={12} >
-                            <FormControl fullWidth sx={{marginBottom:1}}>
-                                <Typography fontSize={14}>Email Address</Typography>
-                                <OutlinedInput sx={{fontSize:14}} size="small" placeholder="Email Address" type="email" 
-                                    id="email"
-                                    name="email"
-                                    value={formik.values.email}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.email && Boolean(formik.errors.email)}
-                                />
-                                <FormHelperText sx={{color:"#de342f"}} >{formik.touched.email && formik.errors.email}</FormHelperText>
-                            </FormControl>
-                            <FormControl fullWidth sx={{marginBottom:1}}>
-                                <Typography fontSize={14}>Password</Typography>
-                                <OutlinedInput sx={{fontSize:14}} size="small" placeholder="Password" type="password"
-                                    id="password"
-                                    name="password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.password && Boolean(formik.errors.password)}
-                                />
-                                <FormHelperText sx={{color:"#de342f"}}  >{formik.touched.password && formik.errors.password}</FormHelperText>
-                            </FormControl>
+                            {isSignUp ? <SignUpForm formik={formikSu} activeStep={activeStep} /> : <LoginForm formik={formik} /> }
                         </Grid>
-                        <Grid item xs={12} display="flex" justifyContent="end">
+                        {!isSignUp && <Grid item xs={12} display="flex" justifyContent="end">
                             <Button variant="text" disableRipple sx={{textTransform:"none", marginLeft:"auto", paddingTop:0 }}>Forget password?</Button>
-                        </Grid>
+                        </Grid>}
                         <Grid item xs={12} display="flex" marginBottom={1} >
-                            <Button variant="contained" type="submit" fullWidth sx={{textTransform:"none", marginLeft:"auto"}}>Sign In</Button>
+                            {isSignUp ? <Button variant="contained" onClick={() => handleNext()} type={activeStep === 2 ? "submit" : "button"} fullWidth sx={{textTransform:"none", marginLeft:"auto"}}> {activeStep === 2 ? "Create Account" : "Next"} </Button> : <Button variant="contained" type="submit" fullWidth sx={{textTransform:"none", marginLeft:"auto"}}>Sign In</Button>}
                         </Grid>
-                        <Grid item xs={12} display="flex" justifyContent="center">
+                        { !isSignUp && 
+                        <><Grid item xs={12} display="flex" justifyContent="center">
                             <Chip label="Or"/>
                         </Grid>
                         <Grid item xs={12}  display="flex" justifyContent="center" alignItems="center" flexWrap="wrap" marginRight="auto">
@@ -77,20 +56,13 @@ const LoginModal = ({ open, handleClose, formik }) => {
                                 <img width={25} src={appleIcon} alt="applelogo"/>
                             </IconButton>
                         </Grid>
+                        </>
+                        }
                         <Grid item xs={12}>
                             <Divider />
                         </Grid>
                         <Grid item xs={12} marginTop={2} >
-                            <Grid container display="flex" justifyContent="space-between">
-                                <Grid item>
-                                    <Typography fontSize={12} variant="body1">Don't have an account?</Typography>
-                                    <Button sx={{textTransform:"none", padding:0, fontSize:12}} variant="text">Create Account</Button>
-                                </Grid>
-                                <Grid item>
-                                    <Typography fontSize={12} variant="body1">Are you a Sport Center?</Typography>
-                                    <Button sx={{textTransform:"none", padding:0, fontSize:12}} variant="text">Partner with Us</Button>
-                                </Grid>
-                            </Grid>
+                            <LoginModalBottom isSignup={isSignUp} setIsSignUp={setIsSignUp} />
                         </Grid>
                     </Grid>
                     </form>
