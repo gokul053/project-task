@@ -1,6 +1,7 @@
 import { Box, FormControl, FormHelperText, MenuItem, MobileStepper, OutlinedInput, Select, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import React, { useState } from "react";
 
 const SignUpForm = ({formik, activeStep}) => {
     const formDetails = [
@@ -62,7 +63,7 @@ const SignUpForm = ({formik, activeStep}) => {
         },
         {
             inputType: "TEXTFIELD",
-            id: "emailAddress",
+            id: "email",
             tagName: "Email Address"
         },
         {
@@ -77,6 +78,7 @@ const SignUpForm = ({formik, activeStep}) => {
         }]
     ]
     const maxStep = formDetails.length;
+    console.log(formik.values);
     return (
         <>
             {formDetails[activeStep].map((data,index)=>{
@@ -84,7 +86,7 @@ const SignUpForm = ({formik, activeStep}) => {
                     case "TEXTFIELD" :
                     default:
                         return (
-                            <>
+                            <React.Fragment key={index}>
                                 <FormControl fullWidth sx={{marginBottom:1}}>
                                     <Typography fontSize={14}>{data.tagName}</Typography>
                                     <OutlinedInput sx={{fontSize:14}} size="small" placeholder={data.tagName} type={data.type} 
@@ -97,23 +99,21 @@ const SignUpForm = ({formik, activeStep}) => {
                                     />
                                     <FormHelperText sx={{color:"#de342f"}} >{formik.touched[data.id] && formik.errors[data.id]}</FormHelperText>
                                 </FormControl>
-                            </>
+                            </React.Fragment>
                         );
                     case "SELECT" :
                         return (
                             <>
                                 <FormControl fullWidth sx={{marginBottom:1}}>
                                     <Typography fontSize={14}>{data?.tagName}</Typography>
-                                    <Select sx={{fontSize:14}} id={data.id} name={data.id} displayEmpty value='' size="small" placeholder={data?.tagName} >
-                                        <MenuItem sx={{fontSize:14}} value="" disabled>
+                                    <Select sx={{fontSize:14}} id={data?.id} name={data?.id} displayEmpty value={formik.values[data.id]} onChange={formik.handleChange} size="small" placeholder={data?.tagName} >
+                                        <MenuItem sx={{fontSize:14}} value='' disabled>
                                             <span>{data?.tagName}</span>
                                         </MenuItem>
-                                        {data?.items?.map((item, index)=>{
+                                        {data?.items?.map((item)=>{
                                             return(
                                                 <>
-                                                    <div key={index}>
-                                                        <MenuItem sx={{fontSize:14, paddingY:0}} value={index}>{item?.title}</MenuItem>
-                                                    </div>
+                                                    <MenuItem value={item?.title}>{item?.title}</MenuItem>
                                                 </>
                                             );
                                         })}

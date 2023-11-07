@@ -42,6 +42,7 @@ const HeaderPage = () => {
         setActiveStep(0);
         setIsSignUp(false);
         setModalOpen(false);
+        formikSu.resetForm();
         formik.resetForm();
     }
     const getAllSportsData = useSelector((state)=> state?.getAllSport?.getSportsModal?.data);
@@ -102,12 +103,28 @@ const HeaderPage = () => {
             .number()
             .min(10000)
             .max(99999)
-            .required("ZipCode is Required")        
+            .required("ZipCode is Required"),
+        mobileNumber: yup
+            .string()
+            .required("Phone number is required"),
+        confirmPasswor: yup
+            .string()
+            .required("It is Required")      
     });
     const formikSu = useFormik({
         initialValues: {
-          email: '',
-          password: '',
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            gender: '',
+            dateOfBirth: '',
+            street: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            mobileNumber: '',
+            confirmPassword: '' 
         },
         validationSchema: signUpSchema,
         onSubmit: () => {
@@ -135,10 +152,16 @@ const HeaderPage = () => {
                     <Grid item xs={12} display="flex" alignSelf="baseline">
                         <Grid container>
                             <Grid item xs={12} display="flex" justifyContent="center">
-                                <Typography  fontSize={26} fontWeight={550}>
-                                    Book Venues, Coaches & Academies Nearby
-                                    <Divider variant="middle" sx={{backgroundColor:"white", opacity:0.4, marginTop:2}} light/>
-                                </Typography>
+                                <Grid container>
+                                    <Grid item xs={12} display="flex" justifyContent="center">
+                                        <Typography fontSize={26} fontWeight={550}>
+                                            Book Venues, Coaches & Academies Nearby
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} display="flex" justifyContent="center">
+                                        <Divider sx={{backgroundColor:"white", width:"55%", opacity:0.4, marginTop:2}} light/>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                             <Grid item xs={12} display="flex" justifyContent="center" sx={{marginY:3}}>
                                 <Tabs

@@ -32,14 +32,17 @@ const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeSt
                         <Grid item xs={12} >
                             {isSignUp ? <SignUpForm formik={formikSu} activeStep={activeStep} /> : <LoginForm formik={formik} /> }
                         </Grid>
-                        {!isSignUp && <Grid item xs={12} display="flex" justifyContent="end">
+                        {!isSignUp && 
+                        <Grid item xs={12} display="flex" justifyContent="end">
                             <Button variant="text" disableRipple sx={{textTransform:"none", marginLeft:"auto", paddingTop:0 }}>Forget password?</Button>
-                        </Grid>}
+                        </Grid>
+                        }
                         <Grid item xs={12} display="flex" marginBottom={1} >
                             {isSignUp ? <Button variant="contained" onClick={() => handleNext()} type={activeStep === 2 ? "submit" : "button"} fullWidth sx={{textTransform:"none", marginLeft:"auto"}}> {activeStep === 2 ? "Create Account" : "Next"} </Button> : <Button variant="contained" type="submit" fullWidth sx={{textTransform:"none", marginLeft:"auto"}}>Sign In</Button>}
                         </Grid>
                         { !isSignUp && 
-                        <><Grid item xs={12} display="flex" justifyContent="center">
+                        <>
+                        <Grid item xs={12} display="flex" justifyContent="center">
                             <Chip label="Or"/>
                         </Grid>
                         <Grid item xs={12}  display="flex" justifyContent="center" alignItems="center" flexWrap="wrap" marginRight="auto">
