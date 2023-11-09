@@ -1,84 +1,10 @@
 import { Box, FormControl, FormHelperText, MenuItem, MobileStepper, OutlinedInput, Select, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import React, { useState } from "react";
+import React from "react";
 
-const SignUpForm = ({formik, activeStep}) => {
-    const formDetails = [
-        [{
-            inputType: "TEXTFIELD",
-            id: "firstName",
-            tagName: "First Name",
-            type: "text"
-        },
-        {
-            inputType: "TEXTFIELD",
-            id: "lastName",
-            tagName: "Last Name",
-            type: "text"
-        },
-        {
-            inputType: "SELECT",
-            id: "gender",
-            tagName: "Gender",
-            items:[
-                {title: "Male"},
-                {title: "Female"},
-                {title: "Others"}
-            ]
-        },
-        {
-            inputType: "DATE",
-            id: "dateOfBirth",
-            tagName: "Date Of Birth"
-        }],
-        [{
-            inputType: "TEXTFIELD",
-            id: "street",
-            tagName: "Street",
-            type: "text"
-        },
-        {
-            inputType: "TEXTFIELD",
-            id: "city",
-            tagName: "City",
-            type: "text"
-        },
-        {
-            inputType: "TEXTFIELD",
-            id: "state",
-            tagName: "State",
-            type: "text"
-        },
-        {
-            inputType: "TEXTFIELD",
-            id: "zipCode",
-            tagName: "Zip code",
-            type: "number"
-        }],
-        [{
-            inputType: "TEXTFIELD",
-            id: "mobileNumber",
-            tagName: "Mobile number"
-        },
-        {
-            inputType: "TEXTFIELD",
-            id: "email",
-            tagName: "Email Address"
-        },
-        {
-            inputType: "TEXTFIELD",
-            id: "password",
-            tagName: "Password"
-        },
-        {
-            inputType: "TEXTFIELD",
-            id: "confirmPassword",
-            tagName: "Confirm Password" 
-        }]
-    ]
+const SignUpForm = ({formDetails, formik, activeStep}) => {
     const maxStep = formDetails.length;
-    console.log(formik.values);
     return (
         <>
             {formDetails[activeStep].map((data,index)=>{
@@ -106,18 +32,25 @@ const SignUpForm = ({formik, activeStep}) => {
                             <>
                                 <FormControl fullWidth sx={{marginBottom:1}}>
                                     <Typography fontSize={14}>{data?.tagName}</Typography>
-                                    <Select sx={{fontSize:14}} id={data?.id} name={data?.id} displayEmpty value={formik.values[data.id]} onChange={formik.handleChange} size="small" placeholder={data?.tagName} >
-                                        <MenuItem sx={{fontSize:14}} value='' disabled>
-                                            <span>{data?.tagName}</span>
+                                    <Select
+                                    sx={{ fontSize: 14 }}
+                                    displayEmpty
+                                    size="small"
+                                    placeholder={data?.tagName}
+                                    id={data.id}
+                                    name={data.id}
+                                    value={formik.values[data.id]} 
+                                    onBlur={formik.handleBlur}
+                                    onChange={(e) => formik.setFieldValue(data.id, e.target.value)}
+                                    error={formik.touched[data.id] && Boolean(formik.errors[data.id])}
+                                    >
+                                    {data?.items?.map((item) => (
+                                        <MenuItem key={item?.title} value={item?.title}>
+                                        {item?.title}
                                         </MenuItem>
-                                        {data?.items?.map((item)=>{
-                                            return(
-                                                <>
-                                                    <MenuItem value={item?.title}>{item?.title}</MenuItem>
-                                                </>
-                                            );
-                                        })}
+                                    ))}
                                     </Select>
+                                    <FormHelperText sx={{color:"#de342f"}} >{formik.touched[data.id] && formik.errors[data.id]}</FormHelperText>
                                 </FormControl>
                             </>
                         );
@@ -128,6 +61,7 @@ const SignUpForm = ({formik, activeStep}) => {
                                     <FormControl fullWidth sx={{marginBottom:1}}>
                                         <Typography fontSize={14}>{data?.tagName}</Typography>
                                         <DatePicker slotProps={{ textField: { size: 'small', placeholder: 'Date', fullWidth: true} }}/>
+                                        <FormHelperText sx={{color:"#de342f"}} >{formik.touched[data.id] && formik.errors[data.id]}</FormHelperText>
                                     </FormControl>
                                 </LocalizationProvider>
                             </>

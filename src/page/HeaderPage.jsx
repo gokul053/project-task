@@ -35,15 +35,13 @@ const HeaderPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
-    const handleNext = () => { activeStep < 2 && setActiveStep((prevActiveStep) => prevActiveStep + 1); };
-    // const handleBack = () => { setActiveStep((prevActiveStep) => prevActiveStep - 1); };
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => {
         setActiveStep(0);
         setIsSignUp(false);
         setModalOpen(false);
-        formikSu.resetForm();
         formik.resetForm();
+        currentFormik.resetForm();
     }
     const getAllSportsData = useSelector((state)=> state?.getAllSport?.getSportsModal?.data);
     const logInSchema = yup.object().shape({
@@ -66,28 +64,94 @@ const HeaderPage = () => {
           dispatch(login(formik.values.email, formik.values.password));
         },
     });
-
-    const signUpSchema = yup.object().shape({
-        email: yup
-            .string()
-            .email("Email must be a valid email")
-            .required("Email is required"),
-        password: yup
-            .string()
-            .required("Password is required")
-            .min(8, "Password must be at least 8 characters"),
+    const formDetails = [
+        [{
+            inputType: "TEXTFIELD",
+            id: "firstName",
+            tagName: "First Name",
+            type: "text"
+        },
+        {
+            inputType: "TEXTFIELD",
+            id: "lastName",
+            tagName: "Last Name",
+            type: "text"
+        },
+        {
+            inputType: "SELECT",
+            id: "gender",
+            tagName: "Gender",
+            items:[
+                {title: "Male"},
+                {title: "Female"},
+                {title: "Others"}
+            ]
+        },
+        {
+            inputType: "DATE",
+            id: "dateOfBirth",
+            tagName: "Date Of Birth"
+        }],
+        [{
+            inputType: "TEXTFIELD",
+            id: "street",
+            tagName: "Street",
+            type: "text"
+        },
+        {
+            inputType: "TEXTFIELD",
+            id: "city",
+            tagName: "City",
+            type: "text"
+        },
+        {
+            inputType: "TEXTFIELD",
+            id: "state",
+            tagName: "State",
+            type: "text"
+        },
+        {
+            inputType: "TEXTFIELD",
+            id: "zipCode",
+            tagName: "Zip code",
+            type: "number"
+        }],
+        [{
+            inputType: "TEXTFIELD",
+            id: "mobileNumber",
+            tagName: "Mobile number"
+        },
+        {
+            inputType: "TEXTFIELD",
+            id: "email",
+            tagName: "Email Address"
+        },
+        {
+            inputType: "TEXTFIELD",
+            id: "password",
+            tagName: "Password"
+        },
+        {
+            inputType: "TEXTFIELD",
+            id: "confirmPassword",
+            tagName: "Confirm Password" 
+        }]
+    ]
+    const stepOneSchema = yup.object().shape({
         firstName: yup
             .string()
             .required("FirstName is Required")
             .min(3, "Minimum 3 characters"),
         lastName: yup
-            .string(),
+            .string()
+            .required("LastName is Required"),
         gender: yup
             .string()
             .required("Select One"),
         dateOfBirth: yup
             .date()
-            .required("Must enter your date of birth"),
+            .required("Must enter your date of birth")})
+    const stepTwoSchema = yup.object().shape({
         street: yup
             .string()
             .required("Street is required"),
@@ -103,34 +167,64 @@ const HeaderPage = () => {
             .number()
             .min(10000)
             .max(99999)
-            .required("ZipCode is Required"),
+            .required("ZipCode is Required")})
+    const stepThreeSchema = yup.object().shape({
+        email: yup
+            .string()
+            .email("Email must be a valid email")
+            .required("Email is required"),
+        password: yup
+            .string()
+            .required("Password is required")
+            .min(8, "Password must be at least 8 characters"),
         mobileNumber: yup
             .string()
             .required("Phone number is required"),
-        confirmPasswor: yup
+        confirmPassword: yup
             .string()
-            .required("It is Required")      
+            .required("It is Required")
     });
-    const formikSu = useFormik({
+    const formikStepOne = useFormik({
         initialValues: {
-            email: '',
-            password: '',
             firstName: '',
             lastName: '',
             gender: '',
             dateOfBirth: '',
+        },
+        validationSchema: stepOneSchema,
+        onSubmit: () => {
+            setActiveStep(activeStep + 1);
+          },
+    });
+    const formikStepTwo = useFormik({
+        initialValues: {
             street: '',
             city: '',
             state: '',
-            zipCode: '',
-            mobileNumber: '',
-            confirmPassword: '' 
+            zipCode: ''
         },
-        validationSchema: signUpSchema,
+        validationSchema: stepTwoSchema,
         onSubmit: () => {
-            console.log("data");
-        },
+            setActiveStep(activeStep + 1);
+          },
     });
+    const formikStepThree = useFormik({
+        initialValues: {
+            email: '',
+            mobileNumber: '',
+            password:'',
+            confirmPassword:''
+        },
+        validationSchema: stepThreeSchema,
+        onSubmit: () => {
+            console.log("data3");
+          },
+    });
+    const formikArray = [formikStepOne, formikStepTwo, formikStepThree];
+    const currentFormik = formikArray[activeStep];
+    const handleNext = () => {
+        // setActiveStep(activeStep + 1);
+    }
     return (
         <>
         <AppBar className="headerStyle" position="static">
@@ -145,7 +239,7 @@ const HeaderPage = () => {
                                     <Button sx={{borderRadius:"15px", textTransform:"none", fontWeight:700}} onClick={() => handleModalOpen()} color="primary" variant="contained" size="small" >
                                         Log In 
                                     </Button>
-                                    <LoginModal open={modalOpen} isSignUp={isSignUp} setIsSignUp={setIsSignUp} activeStep={activeStep} handleNext={handleNext} formik={formik} formikSu={formikSu} handleClose={() => handleModalClose()} />
+                                    <LoginModal open={modalOpen} isSignUp={isSignUp} setIsSignUp={setIsSignUp} activeStep={activeStep} handleNext={handleNext} formDetails={formDetails} formik={formik} currentFormik={currentFormik} handleClose={() => handleModalClose()} />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -174,7 +268,7 @@ const HeaderPage = () => {
                                     <Tab sx={tabStyle} disableRipple value="three" label="Lessons" />
                                 </Tabs>
                             </Grid>
-                            <Grid item xs={12} width={"100%"} paddingX={15} display="flex" justifyContent="center">
+                            <Grid item xs={12} width={"100%"} marginX={15} display="flex" justifyContent="center">
                                 <FormGroup sx={{width:"100%"}} row>
                                     <TextField sx={{...searchBarStyle,width:"25%"}} placeholder="Location" size="small" 
                                         InputProps={{

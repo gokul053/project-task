@@ -6,3 +6,11 @@
     background-position: center;
     /* height: 100vh; */
 }
+.imageStyle {
+    background-image: url('/src/assets/image/bodyImage.jpg');
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-top: 300px;
+    padding-bottom: 200px;
+}

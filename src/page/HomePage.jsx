@@ -3,22 +3,17 @@ import { Outlet } from "react-router-dom";
 import cardImage from "../assets/image/headerImage.jpg"
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSport, getAllSportPhoto } from "../redux/actions/sportAction";
-import React, { useEffect, useState} from "react";
+import React, { useEffect } from "react";
 import { SportsBaseballRounded } from "@mui/icons-material";
 
 const HomePage = () => {
     const dispatch = useDispatch();
-    const [stillLoading, setstillLoading] = useState(true);
     const getAllSportsData = useSelector((state)=> state?.getAllSport?.getSportsModal);
     const isLoading = getAllSportsData?.loading;
     const getAllSportPhotoData = useSelector((state)=> state?.getAllSportPhoto?.getSportPhotoModal?.data);
     const getImage = (id) => {
         return getAllSportPhotoData?.find(data => data?.sport?.id === id)?.url;
     } 
-    const handleImageLoad = () =>{
-        console.log("data");
-        setstillLoading(false);
-    }
     useEffect(()=>{
         dispatch(getAllSport());
         dispatch(getAllSportPhoto());
@@ -56,10 +51,10 @@ const HomePage = () => {
                                                         <Grid container alignItems="center">
                                                             <Grid item display="flex" alignItems="center" flexWrap="wrap" marginRight="auto">
                                                                 { <Avatar src={getImage(sport?.id)} alt="logo"> <SportsBaseballRounded /> </Avatar>  }
-                                                                {isLoading ? <Skeleton animation="wave" height={15} width={120} variant="rectangular" sx={{marginLeft:1}} /> : <Typography marginLeft={1} fontSize={13} fontWeight={600}>{sport?.title}</Typography> }
+                                                                {isLoading ? <Skeleton animation="pulse" height={15} width={120} variant="rectangular" sx={{marginLeft:1}} /> : <Typography marginLeft={1} fontSize={13} fontWeight={600}>{sport?.title}</Typography> }
                                                             </Grid>
                                                             <Grid item marginLeft="auto">
-                                                                {isLoading ? <Skeleton animation="wave" height={15} width={60} variant="rectangular"/> : <Typography variant="caption">{sport.facilityCount} courts</Typography> }
+                                                                {isLoading ? <Skeleton animation="pulse" height={15} width={60} variant="rectangular"/> : <Typography variant="caption">{sport.facilityCount} courts</Typography> }
                                                             </Grid>
                                                             </Grid>
                                                         </Box>
@@ -75,6 +70,7 @@ const HomePage = () => {
                         </Grid>
                     </Grid>
             </Container>
+            <Container maxWidth className="imageStyle" /> 
             <Outlet />
         </>
     );

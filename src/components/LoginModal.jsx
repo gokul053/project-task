@@ -17,7 +17,7 @@ const style = {
     p: 4,
 };
 
-const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeStep, handleNext, formikSu }) => {
+const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeStep, handleNext, formDetails, currentFormik }) => {
     return(
         <>
             <Modal
@@ -27,10 +27,10 @@ const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeSt
                 aria-describedby="login modal page"
             >
                 <Box sx={style} >
-                    <form onSubmit={formik.handleSubmit}>
+                    <form onSubmit={isSignUp ? currentFormik.handleSubmit : formik.handleSubmit}>
                     <Grid container >
                         <Grid item xs={12} >
-                            {isSignUp ? <SignUpForm formik={formikSu} activeStep={activeStep} /> : <LoginForm formik={formik} /> }
+                            {isSignUp ? <SignUpForm formDetails={formDetails} formik={currentFormik} activeStep={activeStep} /> : <LoginForm formik={formik} /> }
                         </Grid>
                         {!isSignUp && 
                         <Grid item xs={12} display="flex" justifyContent="end">
@@ -38,7 +38,7 @@ const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeSt
                         </Grid>
                         }
                         <Grid item xs={12} display="flex" marginBottom={1} >
-                            {isSignUp ? <Button variant="contained" onClick={() => handleNext()} type={activeStep === 2 ? "submit" : "button"} fullWidth sx={{textTransform:"none", marginLeft:"auto"}}> {activeStep === 2 ? "Create Account" : "Next"} </Button> : <Button variant="contained" type="submit" fullWidth sx={{textTransform:"none", marginLeft:"auto"}}>Sign In</Button>}
+                            {isSignUp ? <Button variant="contained" type="submit" fullWidth sx={{textTransform:"none", marginLeft:"auto"}}> {activeStep === 2 ? "Create Account" : "Next"} </Button> : <Button variant="contained" type="submit" fullWidth sx={{textTransform:"none", marginLeft:"auto"}}>Sign In</Button>}
                         </Grid>
                         { !isSignUp && 
                         <>
