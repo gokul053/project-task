@@ -1,7 +1,8 @@
-import { loginApi } from "../constants/userConstant";
+import { loginApi, signupApi } from "../constants/userConstant";
 
 let intialValues = {
-    loginModal: []
+    loginModal: [],
+    signupModal: []
 }
 export const loginReducer = (value = intialValues, action) => {
     switch (action?.type) {
@@ -11,6 +12,18 @@ export const loginReducer = (value = intialValues, action) => {
             return { loginModal: action?.payload };
         case loginApi.ERROR:
             return { loginModal: action?.payload };
+        default:
+            return value;
+    }
+}
+export const signupReducer = (value = intialValues, action) => {
+    switch (action?.type) {
+        case signupApi.REQUEST:
+            return { signupModal: action?.payload };
+        case signupApi.SUCCESS:
+            return { signupModal: action?.payload };
+        case signupApi.ERROR:
+            return { signupModal: action?.payload };
         default:
             return value;
     }

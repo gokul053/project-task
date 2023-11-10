@@ -60,8 +60,14 @@ const SignUpForm = ({formDetails, formik, activeStep}) => {
                                 <LocalizationProvider dateAdapter={AdapterMoment}>
                                     <FormControl fullWidth sx={{marginBottom:1}}>
                                         <Typography fontSize={14}>{data?.tagName}</Typography>
-                                        <DatePicker slotProps={{ textField: { size: 'small', placeholder: 'Date', fullWidth: true} }}/>
-                                        <FormHelperText sx={{color:"#de342f"}} >{formik.touched[data.id] && formik.errors[data.id]}</FormHelperText>
+                                        <DatePicker value={formik.values[data.id]} onChange={(value) => formik.setFieldValue("dateOfBirth", value, true)} slotProps={{ textField: { 
+                                            size: 'small',
+                                            placeholder: 'Date',
+                                            fullWidth: true ,
+                                            variant: "outlined",
+                                            error: formik.touched[data.id] && Boolean(formik.errors[data.id]),
+                                            helperText: formik.touched[data.id] && formik.errors[data.id]
+                                        } }}/>
                                     </FormControl>
                                 </LocalizationProvider>
                             </>

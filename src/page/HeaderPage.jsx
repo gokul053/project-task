@@ -9,7 +9,7 @@ import LoginModal from "../components/LoginModal";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/actions/userAction";
+import { login, signup } from "../redux/actions/userAction";
 import { LocationOn, MilitaryTech, MyLocation, Search } from "@mui/icons-material";
 const tabStyle = {
     paddingBottom: 0,
@@ -149,7 +149,7 @@ const HeaderPage = () => {
             .string()
             .required("Select One"),
         dateOfBirth: yup
-            .date()
+            .string()
             .required("Must enter your date of birth")})
     const stepTwoSchema = yup.object().shape({
         street: yup
@@ -189,7 +189,7 @@ const HeaderPage = () => {
             firstName: '',
             lastName: '',
             gender: '',
-            dateOfBirth: '',
+            dateOfBirth: null,
         },
         validationSchema: stepOneSchema,
         onSubmit: () => {
@@ -217,8 +217,21 @@ const HeaderPage = () => {
         },
         validationSchema: stepThreeSchema,
         onSubmit: () => {
-            console.log("data3");
-          },
+            const payload = {
+                                firstName: formikStepOne.values.firstName,
+                                lastName: formikStepOne.values.lastName,
+                                phoneNumber: formikStepThree.values.mobileNumber,
+                                email: formikStepThree.values.email,
+                                role: "ROLE_USER",
+                                gender: formikStepOne.values.gender,
+                                dob: formikStepOne.values.dateOfBirth,
+                                street: formikStepTwo.values.street,
+                                city: formikStepTwo.values.city,
+                                state: formikStepTwo.values.state,
+                                zipCode: formikStepTwo.values.zipCode,
+                            }
+            dispatch(signup(payload));    
+        },
     });
     const formikArray = [formikStepOne, formikStepTwo, formikStepThree];
     const currentFormik = formikArray[activeStep];
