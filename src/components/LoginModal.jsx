@@ -1,10 +1,12 @@
-import { Box, Button, Chip, Divider, Grid, IconButton, Modal, Typography  } from "@mui/material";
+import { Backdrop, Box, Button, Chip, CircularProgress, Divider, Grid, IconButton, Modal, Typography  } from "@mui/material";
 import fbIcon from "../assets/image/fb_icon.svg";
 import appleIcon from "../assets/image/apple_icon.svg";
 import googleIcon from "../assets/image/google_icon.svg";
 import LoginModalBottom from "./LoginModalBottom";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
+import { useSelector } from "react-redux";
+import { CheckCircle } from "@mui/icons-material";
 
 const style = {
     position: 'relative',
@@ -18,6 +20,7 @@ const style = {
 };
 
 const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeStep, handleNext, formDetails, currentFormik }) => {
+    const signUpData = useSelector((state)=> state?.signUpApi?.signupModal);
     return(
         <>
             <Modal
@@ -28,7 +31,28 @@ const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeSt
             >
                 <Box sx={style} >
                     <form onSubmit={isSignUp ? currentFormik.handleSubmit : formik.handleSubmit}>
+                    {signUpData?.status === 200 ? 
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} display="flex" justifyContent="center" alignContent="center" >
+                            <Box sx={{lineHeight:0}} fontSize={70} color="green" ><CheckCircle fontSize="inherit" /></Box>
+                        </Grid>
+                        <Grid item xs={12} display="flex" justifyContent="center" >
+                            <Typography fontSize={16} fontWeight={600}>Thank you for signing up</Typography>
+                        </Grid>
+                        <Grid item xs={12} display="flex" justifyContent="center" textAlign="center" >
+                            <Typography fontSize={14} fontWeight={500}>Lets take a few minutes to setup your player profile</Typography>
+                        </Grid>
+                        <Grid item xs={12} display="flex" justifyContent="center" >
+                            <Button sx={{textTransform: "none"}} size="small" fullWidth variant="contained">Continue</Button>
+                        </Grid>
+                    </Grid> : 
                     <Grid container >
+                        <Backdrop
+                        sx={{ color: '#de342f', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={signUpData?.loading}
+                        >
+                            <CircularProgress color="inherit" />
+                        </Backdrop>
                         <Grid item xs={12} >
                             {isSignUp ? <SignUpForm formDetails={formDetails} formik={currentFormik} activeStep={activeStep} /> : <LoginForm formik={formik} /> }
                         </Grid>
@@ -67,7 +91,7 @@ const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeSt
                         <Grid item xs={12} marginTop={2} >
                             <LoginModalBottom isSignup={isSignUp} setIsSignUp={setIsSignUp} />
                         </Grid>
-                    </Grid>
+                    </Grid>}
                     </form>
                 </Box>
             </Modal>

@@ -8,6 +8,8 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import setupInterceptors from './globals/interceptors';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const theme = createTheme({
   palette: {

@@ -9,7 +9,7 @@ import LoginModal from "../components/LoginModal";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-import { login, signup } from "../redux/actions/userAction";
+import { clearSignUp, login, signup } from "../redux/actions/userAction";
 import { LocationOn, MilitaryTech, MyLocation, Search } from "@mui/icons-material";
 const tabStyle = {
     paddingBottom: 0,
@@ -42,6 +42,7 @@ const HeaderPage = () => {
         setModalOpen(false);
         formik.resetForm();
         currentFormik.resetForm();
+        dispatch(clearSignUp());
     }
     const getAllSportsData = useSelector((state)=> state?.getAllSport?.getSportsModal?.data);
     const logInSchema = yup.object().shape({
@@ -180,9 +181,8 @@ const HeaderPage = () => {
         mobileNumber: yup
             .string()
             .required("Phone number is required"),
-        confirmPassword: yup
-            .string()
-            .required("It is Required")
+        confirmPassword: yup.string()
+            .oneOf([yup.ref('password'), null], 'Passwords must match')
     });
     const formikStepOne = useFormik({
         initialValues: {

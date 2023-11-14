@@ -24,6 +24,8 @@ export const signupReducer = (value = intialValues, action) => {
             return { signupModal: action?.payload };
         case signupApi.ERROR:
             return { signupModal: action?.payload };
+        case signupApi.RESET:
+            return { signupModal: [] };
         default:
             return value;
     }

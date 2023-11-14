@@ -34,16 +34,20 @@ export const signup = (signup) => async(dispatch) => {
         payload: {loading: true}
     });
     try {
-        console.log(signup,"signup data");
-        const {data} = (await axios.post('api/user-management/create/user',signup));
+        const {data, status} = (await axios.post('api/user-management/create/user',signup));
         await dispatch({
             type: signupApi.SUCCESS,
-            payload:{loading: false, data:data}
+            payload:{loading: false, data:data, status: status}
         });
     } catch {
         await dispatch({
             type: signupApi.ERROR,
-            payload:{loading: false}
+            payload:{ loading: false }
         });
     }
+}
+export const clearSignUp = () => async(dispatch) => {
+    await dispatch({
+        type: signupApi.RESET
+    });
 }
