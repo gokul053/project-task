@@ -130,7 +130,8 @@ const HeaderPage = () => {
         {
             inputType: "TEXTFIELD",
             id: "password",
-            tagName: "Password"
+            tagName: "Password",
+            type: "password"
         },
         {
             inputType: "TEXTFIELD",

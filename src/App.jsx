@@ -4,6 +4,7 @@ import HomePage from './page/HomePage';
 import HeaderPage from './page/HeaderPage';
 import FooterPage from './page/FooterPage';
 import PrivateRoute from './PrivateRoute';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const checkLocalStorage = () => {
@@ -17,9 +18,21 @@ const App = () => {
   }
   const Wrapper = () => {
     return (
-      <div className="wrapper">
+      <>
+        <ToastContainer 
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        />
         <Outlet />
-      </div>
+      </>
     );
   };
   return (

@@ -70,7 +70,7 @@ const HomePage = () => {
                         </Grid>
                     </Grid>
             </Container>
-            <Container maxWidth className="imageStyle" /> 
+            <Container maxWidth="true" className="imageStyle" /> 
             <Outlet />
         </>
     );

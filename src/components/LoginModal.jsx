@@ -21,6 +21,7 @@ const style = {
 
 const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeStep, handleNext, formDetails, currentFormik }) => {
     const signUpData = useSelector((state)=> state?.signUpApi?.signupModal);
+    const isLoading = signUpData?.loading ? true : false; 
     return(
         <>
             <Modal
@@ -49,7 +50,7 @@ const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeSt
                     <Grid container >
                         <Backdrop
                         sx={{ color: '#de342f', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                        open={signUpData?.loading}
+                        open={isLoading}
                         >
                             <CircularProgress color="inherit" />
                         </Backdrop>

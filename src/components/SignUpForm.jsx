@@ -30,7 +30,7 @@ const SignUpForm = ({formDetails, formik, activeStep}) => {
                         );
                     case "SELECT" :
                         return (
-                            <>
+                            <React.Fragment key={index}>
                                 <FormControl fullWidth sx={{marginBottom:1}}>
                                     <Typography fontSize={14}>{data?.tagName}</Typography>
                                     <Select
@@ -53,11 +53,11 @@ const SignUpForm = ({formDetails, formik, activeStep}) => {
                                     </Select>
                                     <FormHelperText sx={{color:"#de342f"}} >{formik.touched[data.id] && formik.errors[data.id]}</FormHelperText>
                                 </FormControl>
-                            </>
+                            </React.Fragment>
                         );
                     case "DATE" :
                         return(
-                            <>
+                            <React.Fragment key={index}>
                                 <LocalizationProvider dateAdapter={AdapterMoment}>
                                     <FormControl fullWidth sx={{marginBottom:1}}>
                                         <Typography fontSize={14}>{data?.tagName}</Typography>
@@ -73,7 +73,7 @@ const SignUpForm = ({formDetails, formik, activeStep}) => {
                                         />
                                     </FormControl>
                                 </LocalizationProvider>
-                            </>
+                            </React.Fragment>
                         );
                 }
             })}
