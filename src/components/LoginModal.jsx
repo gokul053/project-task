@@ -10,8 +10,8 @@ import { CheckCircle } from "@mui/icons-material";
 
 const style = {
     position: 'relative',
-    top: '44%',
-    left: '77%',
+    top: '37%',
+    left: '73%',
     transform: 'translate(-50%, -50%)',
     width: 270,
     bgcolor: 'background.paper',
@@ -19,9 +19,13 @@ const style = {
     p: 4,
 };
 
-const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeStep, handleNext, formDetails, currentFormik }) => {
+const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeStep, formDetails, currentFormik }) => {
     const signUpData = useSelector((state)=> state?.signUpApi?.signupModal);
-    const isLoading = signUpData?.loading ? true : false; 
+    const loginData = useSelector((state)=> state?.loginApi?.loginModal);
+    const isLoading = signUpData?.loading || loginData?.loading ? true : false;
+    const handleContinue = () => {
+        window.location.reload();
+    }
     return(
         <>
             <Modal
@@ -44,9 +48,25 @@ const LoginModal = ({ open, handleClose, formik, isSignUp, setIsSignUp, activeSt
                             <Typography fontSize={14} fontWeight={500}>Lets take a few minutes to setup your player profile</Typography>
                         </Grid>
                         <Grid item xs={12} display="flex" justifyContent="center" >
-                            <Button sx={{textTransform: "none"}} size="small" fullWidth variant="contained">Continue</Button>
+                            <Button sx={{textTransform: "none"}} size="small" fullWidth variant="contained" onClick={handleContinue} >Continue</Button>
                         </Grid>
-                    </Grid> : 
+                    </Grid> 
+                    : loginData?.status === 200 ? 
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} display="flex" justifyContent="center" alignContent="center" >
+                            <Box sx={{lineHeight:0}} fontSize={70} color="green" ><CheckCircle fontSize="inherit" /></Box>
+                        </Grid>
+                        <Grid item xs={12} display="flex" justifyContent="center" >
+                            <Typography fontSize={16} fontWeight={600}>Login successful</Typography>
+                        </Grid>
+                        <Grid item xs={12} display="flex" justifyContent="center" textAlign="center" >
+                            <Typography fontSize={14} fontWeight={500}>Lets take a few minutes to setup your player profile</Typography>
+                        </Grid>
+                        <Grid item xs={12} display="flex" justifyContent="center" >
+                            <Button sx={{textTransform: "none"}} size="small" fullWidth variant="contained" onClick={handleContinue} >Continue</Button>
+                        </Grid>
+                    </Grid> 
+                    : 
                     <Grid container >
                         <Backdrop
                         sx={{ color: '#de342f', zIndex: (theme) => theme.zIndex.drawer + 1 }}

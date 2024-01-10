@@ -1,6 +1,6 @@
-import { AppBar, Button, Container, Divider, FormControl, FormGroup, Grid, IconButton, InputAdornment, MenuItem, Select, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { AppBar, Avatar, Button, Container, Divider, FormControl, FormGroup, Grid, IconButton, InputAdornment, MenuItem, Popper, Select, Tab, Tabs, TextField, Typography } from "@mui/material";
 import mainLogo from "../assets/image/logopy.svg";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { clearSignUp, login, signup } from "../redux/actions/userAction";
-import { LocationOn, MilitaryTech, MyLocation, Search } from "@mui/icons-material";
+import { ExpandMore, LocationOn, MilitaryTech, MyLocation, Search } from "@mui/icons-material";
 const tabStyle = {
     paddingBottom: 0,
     paddingX: 0,
@@ -36,6 +36,7 @@ const HeaderPage = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const handleModalOpen = () => setModalOpen(true);
+    const navigate = useNavigate();
     const handleModalClose = () => {
         setActiveStep(0);
         setIsSignUp(false);
@@ -62,7 +63,7 @@ const HeaderPage = () => {
         },
         validationSchema: logInSchema,
         onSubmit: () => {
-          dispatch(login(formik.values.email, formik.values.password));
+            dispatch(login(formik.values.email, formik.values.password));
         },
     });
     const formDetails = [
@@ -131,7 +132,8 @@ const HeaderPage = () => {
             inputType: "TEXTFIELD",
             id: "password",
             tagName: "Password",
-            type: "password"
+            type: "password",
+            autoComplete: "off"
         },
         {
             inputType: "TEXTFIELD",
@@ -236,9 +238,6 @@ const HeaderPage = () => {
     });
     const formikArray = [formikStepOne, formikStepTwo, formikStepThree];
     const currentFormik = formikArray[activeStep];
-    const handleNext = () => {
-        // setActiveStep(activeStep + 1);
-    }
     return (
         <>
         <AppBar className="headerStyle" position="static">
@@ -250,11 +249,34 @@ const HeaderPage = () => {
                             <img width={240} src={mainLogo} alt="logo"/>
                             </Grid>
                             <Grid item xs={6} display={"flex"} justifyContent={"end"} alignSelf="center" >
-                                    <Button sx={{borderRadius:"15px", textTransform:"none", fontWeight:700}} onClick={() => handleModalOpen()} color="primary" variant="contained" size="small" >
-                                        Log In 
-                                    </Button>
-                                    <LoginModal open={modalOpen} isSignUp={isSignUp} setIsSignUp={setIsSignUp} activeStep={activeStep} handleNext={handleNext} formDetails={formDetails} formik={formik} currentFormik={currentFormik} handleClose={() => handleModalClose()} />
-                            </Grid>
+                                {localStorage.getItem('accessToken') ? 
+                                <>
+                                <Button disableRipple sx={{textTransform:"none", color:"white"}}>
+                                    <Grid container display={"flex"} justifyContent={"end"}>
+                                    <Grid item display={"flex"} marginRight={1}>
+                                        <Avatar>{localStorage.getItem('name').charAt(0)}</Avatar>
+                                    </Grid>
+                                    <Grid item display={"flex"} alignItems={"start"} alignSelf={"center"}>
+                                        <Grid item >
+                                            <Typography fontWeight={600} fontSize={17} >Hi, {localStorage.getItem('name')}</Typography>
+                                        </Grid>
+                                        <Grid item display={"flex"} alignSelf={"center"}>
+                                            <ExpandMore />    
+                                        </Grid>
+                                    </Grid>
+                                    </Grid>
+                                </Button>
+                                <Popper placement="bottom-end">
+                                    
+                                </Popper>
+                                </>
+                                :
+                                <Button sx={{borderRadius:"20px", textTransform:"none",fontSize:16, fontWeight:500, paddingX:2}} onClick={() => handleModalOpen()} color="primary" variant="contained" size="small" >
+                                            Log in
+                                </Button>
+                                }
+                                <LoginModal open={modalOpen} isSignUp={isSignUp} setIsSignUp={setIsSignUp} activeStep={activeStep} formDetails={formDetails} formik={formik} currentFormik={currentFormik} handleClose={() => handleModalClose()} />
+                            </Grid> 
                         </Grid>
                     </Grid>
                     <Grid item xs={12} display="flex" alignSelf="baseline">
@@ -343,7 +365,6 @@ const HeaderPage = () => {
                 </Grid>
             </Container>
         </AppBar>
-        <Outlet />
         </>
     );
 }

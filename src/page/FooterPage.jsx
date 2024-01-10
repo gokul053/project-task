@@ -1,4 +1,3 @@
-import { Outlet } from "react-router-dom";
 import { Grid, Typography, Divider, Button, Box, AppBar, IconButton} from "@mui/material";
 import React from "react";
 import { Copyright, Facebook, Instagram, LinkedIn, Twitter } from "@mui/icons-material";
@@ -54,7 +53,6 @@ const FooterPage = () => {
                     </Grid>
                 </Grid>
             </AppBar>
-            <Outlet />
         </>
     );
 }

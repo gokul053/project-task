@@ -1,35 +1,35 @@
 import './App.css';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import HomePage from './page/HomePage';
-import HeaderPage from './page/HeaderPage';
-import FooterPage from './page/FooterPage';
 import PrivateRoute from './PrivateRoute';
 import { ToastContainer } from 'react-toastify';
+import LayoutProvider from './page/Layout';
+import UserInterest from './page/UserInterest';
 
 const App = () => {
   const checkLocalStorage = () => {
-    if(
+    if (
       localStorage.getItem('accessToken') &&
       localStorage.getItem('refreshToken')
     )
-    return true;
+      return true;
     else
-    return false;
+      return false;
   }
   const Wrapper = () => {
     return (
       <>
-        <ToastContainer 
-        position="top-center"
-        autoClose={1000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
         />
         <Outlet />
       </>
@@ -37,18 +37,17 @@ const App = () => {
   };
   return (
     <>
-      <HeaderPage />
       <Routes>
-        <Route element={<Wrapper/>}>
-          <Route path='/' element={<HomePage />} />
-          <Route element={<PrivateRoute isAuth={checkLocalStorage()} />}>
-            
+        <Route element={<Wrapper />}>
+          <Route element={<LayoutProvider />} >
+            <Route path='/' element={<HomePage />} />
+            <Route element={<PrivateRoute isAuth={checkLocalStorage()} />}>
+              <Route path='/hello' element={<UserInterest />} />
+            </Route>
           </Route>
         </Route>
       </Routes>
-      <FooterPage />
     </>
   );
 }
-
 export default App;

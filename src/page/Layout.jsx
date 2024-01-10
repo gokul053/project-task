@@ -6,7 +6,7 @@ const LayoutProvider = () => {
     return(
         <>
             <HeaderPage />
-            <Outlet />
+            <Outlet/>
             <FooterPage />
         </>
     );

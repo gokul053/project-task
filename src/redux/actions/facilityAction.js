@@ -8,7 +8,7 @@ export const getFacilityCount = (id) => async (dispatch) => {
         payload: {loading: true}
     });
     try {
-        const {data} = (await axios.get(BASR_URL + `api/facilities/count?sportId.equals=${id}`, {headers:{'Authorization': TOKEN}}));
+        const {data} = await axios.get(BASR_URL + `api/facilities/count?sportId.equals=${id}`, {headers:{'Authorization': TOKEN}});
         await dispatch({
             type: getFacilityCountApi.SUCCESS,
             payload:{loading: false, data:{sportId: id, count: data}}

@@ -7,7 +7,7 @@ export const login = (username, pass) => async(dispatch) => {
         payload: {loading: true}
     });
     try {
-        const {data} = (await axios.post('api/user-management/login',{
+        const {data,status} = (await axios.post('api/user-management/login',{
             userName: username,
             password: pass
           }));
@@ -18,7 +18,7 @@ export const login = (username, pass) => async(dispatch) => {
         localStorage.setItem('id', accountData.data.id);
         await dispatch({
             type: loginApi.SUCCESS,
-            payload:{loading: false, data:data}
+            payload:{loading: false, data:data, status: status}
         });
     } catch {
         await dispatch({
