@@ -8,11 +8,18 @@ import { SportsBaseballRounded } from "@mui/icons-material";
 
 const HomePage = () => {
     const dispatch = useDispatch();
+    const loginData = useSelector((state)=> state?.loginApi?.loginModal);
     const getAllSportsData = useSelector((state) => state?.getAllSport?.getSportsModal);
     const isLoading = getAllSportsData?.loading;
     const getAllSportPhotoData = useSelector((state) => state?.getAllSportPhoto?.getSportPhotoModal?.data);
     const getImage = (id) => getAllSportPhotoData?.find(data => data?.sport?.id === id)?.url;
-    
+    useEffect(()=>{
+        if (loginData?.status === 200) {
+            dispatch(getAllSport());
+            dispatch(getAllSportPhoto());
+        } 
+        // eslint-disable-next-line
+    },[loginData])
     useEffect(() => {
         dispatch(getAllSport());
         dispatch(getAllSportPhoto());

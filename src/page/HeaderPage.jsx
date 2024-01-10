@@ -1,6 +1,5 @@
-import { AppBar, Avatar, Button, Container, Divider, FormControl, FormGroup, Grid, IconButton, InputAdornment, MenuItem, Popper, Select, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { AppBar, Avatar, Button, Container, Divider, FormControl, FormGroup, Grid, IconButton, InputAdornment, ListItemIcon, Menu, MenuItem, Select, Tab, Tabs, TextField, Typography } from "@mui/material";
 import mainLogo from "../assets/image/logopy.svg";
-import { Outlet, useNavigate } from "react-router-dom";
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useSelector } from "react-redux";
@@ -10,7 +9,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { clearSignUp, login, signup } from "../redux/actions/userAction";
-import { ExpandMore, LocationOn, MilitaryTech, MyLocation, Search } from "@mui/icons-material";
+import { ExpandMore, LocationOn, Logout, MilitaryTech, MyLocation, PersonAdd, Search, Settings } from "@mui/icons-material";
 const tabStyle = {
     paddingBottom: 0,
     paddingX: 0,
@@ -36,7 +35,18 @@ const HeaderPage = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const handleModalOpen = () => setModalOpen(true);
-    const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const handleLogout = () => {
+        localStorage.clear();
+        window.location.reload();
+    }
     const handleModalClose = () => {
         setActiveStep(0);
         setIsSignUp(false);
@@ -251,7 +261,9 @@ const HeaderPage = () => {
                             <Grid item xs={6} display={"flex"} justifyContent={"end"} alignSelf="center" >
                                 {localStorage.getItem('accessToken') ? 
                                 <>
-                                <Button disableRipple sx={{textTransform:"none", color:"white"}}>
+                                <Button disableRipple sx={{textTransform:"none", color:"white"}}
+                                    onClick={handleClick}
+                                >
                                     <Grid container display={"flex"} justifyContent={"end"}>
                                     <Grid item display={"flex"} marginRight={1}>
                                         <Avatar>{localStorage.getItem('name').charAt(0)}</Avatar>
@@ -266,9 +278,63 @@ const HeaderPage = () => {
                                     </Grid>
                                     </Grid>
                                 </Button>
-                                <Popper placement="bottom-end">
-                                    
-                                </Popper>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    id="account-menu"
+                                    open={open}
+                                    onClick={handleClose}
+                                    PaperProps={{
+                                    elevation: 0,
+                                    sx: {
+                                        overflow: 'visible',
+                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                        mt: 1.5,
+                                        '& .MuiAvatar-root': {
+                                        width: 32,
+                                        height: 32,
+                                        ml: -0.5,
+                                        mr: 1,
+                                        },
+                                        '&::before': {
+                                        content: '""',
+                                        display: 'block',
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 14,
+                                        width: 10,
+                                        height: 10,
+                                        bgcolor: 'background.paper',
+                                        transform: 'translateY(-50%) rotate(45deg)',
+                                        zIndex: 0,
+                                        },
+                                    },
+                                    }}
+                                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                                >
+                                    <MenuItem>
+                                    <Avatar /> Profile
+                                    </MenuItem>
+                                    <Divider />
+                                    <MenuItem>
+                                    <ListItemIcon>
+                                        <PersonAdd color="primary" fontSize="small" />
+                                    </ListItemIcon>
+                                    Add another account
+                                    </MenuItem>
+                                    <MenuItem>
+                                    <ListItemIcon>
+                                        <Settings color="primary" fontSize="small" />
+                                    </ListItemIcon>
+                                    Settings
+                                    </MenuItem>
+                                    <MenuItem onClick={handleLogout}>
+                                    <ListItemIcon>
+                                        <Logout color="primary" fontSize="small" />
+                                    </ListItemIcon>
+                                    Logout
+                                    </MenuItem>
+                                </Menu>
                                 </>
                                 :
                                 <Button sx={{borderRadius:"20px", textTransform:"none",fontSize:16, fontWeight:500, paddingX:2}} onClick={() => handleModalOpen()} color="primary" variant="contained" size="small" >
